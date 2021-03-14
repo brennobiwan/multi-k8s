@@ -1,0 +1,33 @@
+version: "3"
+services:
+	nginx: 
+		build: ./nginx
+		ports:
+			- "3500:80"
+		depends_on:
+			- api
+			- web
+	web:
+		build: ./client
+		volumes:
+			- /app/node_modules
+			- ./client:/app
+		depends_on:
+			- api
+	api:
+		build: ./server
+		volumes:
+			- /app/node_modules
+			- ./server:/app
+		depends_on:
+			- postgres
+			- redis
+		environment:
+			- POSTGRES_PASSWORD=postgres
+			- 
+	worker:
+		build: ./worker
+		depends_on:
+			- postgres
+			- redis
+		

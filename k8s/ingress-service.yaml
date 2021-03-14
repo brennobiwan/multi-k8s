@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: "nginx" # specifies the use of NGINX-Ingress.
+    nginx.ingress.kubernetes.io/use-regex: "true" # allows the use of regex.
+    nginx.ingress.kubernetes.io/rewrite-target: /$1 # rewrites the URL and leaves only the matching pattern.
+
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /?(.*) # matches anything after forward slash.
+            backend:
+              serviceName: web-cluster-ip-service
+              servicePort: 3000
+          - path: /api/?(.*) # matches anything after "/api/".
+            backend:
+              serviceName: api-cluster-ip-service
+              servicePort: 5000
