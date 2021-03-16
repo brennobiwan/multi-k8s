@@ -22,3 +22,20 @@ before_install:
 
   # activate the account we created for Travis so it can interact with GKE; "service-account.json" has the account credentials. This file was encrypted and uploaded to Travis.
   - gcloud auth activate-service-account --key-file service-account.json
+
+  # tell the gcloud CLI the project it is working on and the zone of the project.
+  - glcoud config set project playground-s-11-041312d1
+  - gcloud config set compute/zone us-central1-c
+
+  # tell gcloud CLI which cluster the Travis is working with.
+  - gcloud container clusters get-credentials multi-cluster-k8s
+
+  # login to Docker Hub. These variables were already configured on Travis dashboard.
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_PASSWORD" --passwd-stdin
+
+  # build the test image.
+  - docker build -t brennobiwan/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  # run the test
+  - docker run -e CI=true brennobiwan/react-test npm run test
