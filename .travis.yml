@@ -5,6 +5,14 @@ sudo: required
 services:
   - docker
 
+# set environment variables to the Travis instance.
+env:
+  global:
+    # save the current GIT_SHA value of the master branch into GIT_SHA.
+    - GIT_SHA=$(git rev-parse HEAD)
+    # configure gcloud CLI to not prompt anything (example: asking for user input).
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+
 before_install:
   # setting up GKE on the Travis instance.
 
@@ -24,14 +32,14 @@ before_install:
   - gcloud auth activate-service-account --key-file service-account.json
 
   # tell the gcloud CLI the project it is working on and the zone of the project.
-  - glcoud config set project playground-s-11-041312d1
+  - glcoud config set project playground-s-11-a6a8c024
   - gcloud config set compute/zone us-central1-c
 
   # tell gcloud CLI which cluster the Travis is working with.
   - gcloud container clusters get-credentials multi-cluster-k8s
 
   # login to Docker Hub. These variables were already configured on Travis dashboard.
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_PASSWORD" --passwd-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --passwd-stdin
 
   # build the test image.
   - docker build -t brennobiwan/react-test -f ./client/Dockerfile.dev ./client
@@ -39,3 +47,12 @@ before_install:
 script:
   # run the test
   - docker run -e CI=true brennobiwan/react-test npm run test
+
+deploy:
+  # tell Travis that we will deploy the cluster using a custom script.
+  provider: script
+  # script that will deploy our cluster to GKE.
+  script: bash ./deploy.sh
+  # trigger the deployment only when something is pushed to GitHub master branch.
+  on:
+    branch: master
