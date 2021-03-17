@@ -17,7 +17,8 @@ before_install:
   # setting up GKE on the Travis instance.
 
   # decrypt the credentials file so Travis can interact with GKE.
-  - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
+  # - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
+  secure: "Ef+kMqYm8cvgtJ5GN3zEURdYMqsEJcYBhVSuecbswZlZYKPKjJMkF05yHqfoPICxhCIf43hIfWwXlRwhlKkt4Qx5/SEqFXyVYxdp/z8LMKyDcR2Pv9GiBHzWtmuw2ghWDMwzrRwQ5oTeVLWazwQlXrEcl64QDuIk+3mtTuVsrbz2mTKbXCg4EQvrnU7tsi1xRux2O83arqXrEEqgi5xcawICzV7V/3VTg+YJ83cvHd8UFhsg17ECYYxauwSRAy7sTawwR5VKQddKTvsACsM80orY/2xV303rQjG3dyeINtWreM/DPxKmoggoLbpzEq/YQMHzKoGx9kLrMKZcFnQ8odtv0EjrJNBkBjdJHpNoBBuCOn7h/IxIUKAgo4mpCwvBEeQZBO9LONmzd+ipfPCeV3BqlA46tGhmLug8FNNBXi+rle7ICg22cg116t0XhgyrgUAh8DcGVB35Tzll8dv+Vqo0FYAsfJN5+zlVJi7iFccCAa4MbeCKKWxuILT/NPxOLTSJrazfAKiAIGomoIMJNwHmQ7R0Gu7tGlNWxbM+J11EzAT+rq6W64AKdIGgB74KVPlrTsayOJtyab/UpvrEa0LsSMwPb+AY/h4rWs3MdklEpVfT+qmfkm8ADmHwP/NDLg1EjIFK0OsU6FySxKehjUrwXQN4SKP4pw6emNRd2QI="
 
   # install Google Cloud SDK CLI on the Travis instance.
   - curl https://sdk.cloud.google.com | bash > /dev/null;
@@ -39,7 +40,7 @@ before_install:
   - gcloud container clusters get-credentials multi-cluster-k8s
 
   # login to Docker Hub. These variables were already configured on Travis dashboard.
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   # build the test image.
   - docker build -t brennobiwan/react-test -f ./client/Dockerfile.dev ./client
