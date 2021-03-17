@@ -32,7 +32,7 @@ before_install:
   - gcloud auth activate-service-account --key-file service-account.json
 
   # tell the gcloud CLI the project it is working on and the zone of the project.
-  - glcoud config set project playground-s-11-a6a8c024
+  - gcloud config set project playground-s-11-a6a8c024
   - gcloud config set compute/zone us-central1-c
 
   # tell gcloud CLI which cluster the Travis is working with.
