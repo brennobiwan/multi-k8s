@@ -33,13 +33,13 @@ before_install:
 
   # tell the gcloud CLI the project it is working on and the zone of the project.
   - gcloud config set project playground-s-11-a6a8c024
-  - gcloud config set compute/zone us-central1-c 
+  - gcloud config set compute/zone us-central1-c
 
   # tell gcloud CLI which cluster the Travis is working with.
   - gcloud container clusters get-credentials multi-cluster-k8s
 
   # login to Docker Hub. These variables were already configured on Travis dashboard.
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --passwd-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   # build the test image.
   - docker build -t brennobiwan/react-test -f ./client/Dockerfile.dev ./client
