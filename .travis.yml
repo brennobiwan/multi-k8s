@@ -39,7 +39,7 @@ before_install:
   - gcloud container clusters get-credentials multi-cluster-k8s
 
   # login to Docker Hub. These variables were already configured on Travis dashboard.
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin 
 
   # build the test image.
   - docker build -t brennobiwan/react-test -f ./client/Dockerfile.dev ./client
