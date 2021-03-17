@@ -33,7 +33,7 @@ before_install:
 
   # tell the gcloud CLI the project it is working on and the zone of the project.
   - gcloud config set project playground-s-11-a6a8c024
-  - gcloud config set compute/zone us-central1-c
+  - gcloud config set compute/zone us-central1-c 
 
   # tell gcloud CLI which cluster the Travis is working with.
   - gcloud container clusters get-credentials multi-cluster-k8s
