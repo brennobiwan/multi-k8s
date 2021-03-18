@@ -1,0 +1,23 @@
+apiVersion: skaffold/v1beta2
+kind: Config
+build:
+  # by default, Skaffold will try to push the image to DockerHub; we are preventing that behavior.
+  local:
+    push: false
+  # defines the image that Skaffold will manage.
+  artifacts:
+    - image: brennobiwan/multi-client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+      # enabling Skaffold mode 2. If a file other than js, css, or html is changed, Skaffold will use mode 1.
+      sync:
+        '**/*.js': . # anytime a js file is changed, it will be sent to the container.
+        '**/*.css': .
+        '**/*.html': .
+  # defines the k8s config files that Skaffold should use to manage the image.
+  deploy:
+    kubectl:
+      manifests:
+        - k8s/web-deployment.yaml
+        
